@@ -1,0 +1,373 @@
+/* ── Reset & Variables ───────────────────────────────────────── */
+:root {
+  --bg: #eef2f7;
+  --surface: #ffffff;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.10);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.13);
+  --radius: 18px;
+  --radius-sm: 10px;
+  --gap: 12px;
+  --transition: 0.18s ease;
+  --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  height: 100dvh;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* ── App Shell ───────────────────────────────────────────────── */
+#app {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 960px;
+  padding: var(--gap);
+  gap: var(--gap);
+}
+
+/* ── Header ──────────────────────────────────────────────────── */
+#header {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.header-text { flex: 1; min-width: 0; }
+
+#app-title {
+  font-size: clamp(1rem, 3vw, 1.4rem);
+  font-weight: 800;
+  color: #1a1a2e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#app-subtitle {
+  font-size: 0.8rem;
+  color: #777;
+  margin-top: 2px;
+}
+
+/* Progress */
+#progress-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+#progress-bar-wrap {
+  width: 110px;
+  height: 10px;
+  background: #e0e0e0;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+#progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #43a047, #66bb6a);
+  border-radius: 5px;
+  transition: width 0.4s cubic-bezier(.4,0,.2,1);
+}
+
+#progress-label {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #444;
+  white-space: nowrap;
+}
+
+/* ── Quadrant Grid ───────────────────────────────────────────── */
+#main {
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  min-height: 0;
+}
+
+#quadrant-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: var(--gap);
+  width: 100%;
+}
+
+/* ── Single Quadrant ─────────────────────────────────────────── */
+.quadrant {
+  border-radius: var(--radius);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  cursor: default;
+  border: 3px solid transparent;
+  transition: transform var(--transition), box-shadow var(--transition),
+              border-color var(--transition);
+  overflow: hidden;
+  /* color applied inline from config */
+}
+
+/* subtle inner overlay for depth */
+.quadrant::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(255,255,255,0.18) 0%, transparent 60%);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.quadrant-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.quadrant-emoji { font-size: 1.7rem; line-height: 1; }
+
+.quadrant-label {
+  font-size: clamp(0.85rem, 2vw, 1.05rem);
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.25);
+}
+
+.quadrant-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  flex: 1;
+  align-content: flex-start;
+  overflow-y: auto;
+}
+
+/* Drag-over highlight */
+.quadrant.drag-over {
+  transform: scale(1.03);
+  border-color: rgba(255, 255, 255, 0.75) !important;
+  box-shadow: 0 0 0 4px rgba(255,255,255,0.35),
+              0 8px 30px rgba(0,0,0,0.2) !important;
+}
+
+/* Flash animations */
+.quadrant.flash-success { animation: flash-ok 0.45s ease; }
+.quadrant.flash-error   { animation: flash-err 0.4s ease; }
+
+@keyframes flash-ok {
+  0%   { filter: brightness(1); }
+  40%  { filter: brightness(1.35); }
+  100% { filter: brightness(1); }
+}
+
+@keyframes flash-err {
+  0%, 100% { transform: translateX(0) scale(1); }
+  25%       { transform: translateX(-7px) scale(1); }
+  75%       { transform: translateX(7px) scale(1); }
+}
+
+/* ── Placed chip inside quadrant ─────────────────────────────── */
+.placed-item {
+  background: rgba(255, 255, 255, 0.88);
+  border-radius: 20px;
+  padding: 4px 10px 4px 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #222;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  animation: pop-in 0.3s cubic-bezier(.34,1.56,.64,1);
+  white-space: nowrap;
+}
+
+.placed-item-emoji { font-size: 1rem; }
+
+/* ── Objects Panel ───────────────────────────────────────────── */
+#objects-panel {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: 10px 14px;
+  flex-shrink: 0;
+}
+
+#panel-hint {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #999;
+  text-align: center;
+  margin-bottom: 8px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+#objects-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+/* ── Draggable Object Card ───────────────────────────────────── */
+.object-item {
+  background: #f4f6fa;
+  border: 2px solid #dde1ea;
+  border-radius: var(--radius-sm);
+  padding: 8px 10px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  transition: transform var(--transition), box-shadow var(--transition),
+              opacity var(--transition);
+  min-width: 68px;
+}
+
+.object-item:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: #b0b8cc;
+}
+
+.object-item.dragging {
+  opacity: 0.35;
+  transform: scale(0.95);
+}
+
+.object-item.shake {
+  animation: shake 0.38s ease;
+}
+
+.object-emoji  { font-size: 1.6rem; line-height: 1; }
+
+.object-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #444;
+  text-align: center;
+  max-width: 72px;
+  line-height: 1.2;
+}
+
+/* ── Keyframes ───────────────────────────────────────────────── */
+@keyframes pop-in {
+  from { transform: scale(0.4); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-9px); }
+  40%       { transform: translateX(9px); }
+  60%       { transform: translateX(-6px); }
+  80%       { transform: translateX(6px); }
+}
+
+/* ── Completion Overlay ──────────────────────────────────────── */
+#overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 15, 40, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  animation: fade-in 0.3s ease;
+}
+
+#overlay.hidden { display: none; }
+
+#overlay-content {
+  background: var(--surface);
+  border-radius: 28px;
+  padding: 48px 44px;
+  text-align: center;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.35);
+  animation: pop-in 0.4s cubic-bezier(.34,1.56,.64,1);
+  max-width: 340px;
+  width: 90%;
+}
+
+#overlay-emoji   { font-size: 4rem; margin-bottom: 12px; }
+#overlay-content h2 {
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin-bottom: 8px;
+}
+#overlay-content p  { color: #666; font-size: 1rem; margin-bottom: 28px; }
+
+#restart-btn {
+  background: linear-gradient(135deg, #43a047, #66bb6a);
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  padding: 13px 36px;
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  letter-spacing: 0.02em;
+}
+
+#restart-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(67,160,71,0.45);
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Touch drag ghost ────────────────────────────────────────── */
+.touch-ghost {
+  position: fixed;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.9;
+  transform: scale(1.12) rotate(2deg);
+  filter: drop-shadow(0 8px 16px rgba(0,0,0,0.25));
+  transition: none;
+  border-radius: var(--radius-sm);
+  background: #f4f6fa;
+  border: 2px solid #b0b8cc;
+  padding: 8px 10px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  min-width: 68px;
+}
+
+/* ── Responsive tweaks ───────────────────────────────────────── */
+@media (max-width: 480px) {
+  #header { padding: 10px 14px; }
+  #progress-bar-wrap { width: 80px; }
+  .object-item { min-width: 58px; padding: 6px 8px 5px; }
+  .object-emoji { font-size: 1.35rem; }
+}

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Categorización de Objetos</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <!--
+    ╔══════════════════════════════════════════════╗
+    ║  PARA CAMBIAR DE TEMA, reemplazá config.js   ║
+    ║  por cualquier otro archivo de configuración ║
+    ║  (ej. config-supermercado.js)                ║
+    ╚══════════════════════════════════════════════╝
+  -->
+  <!--
+    ╔══════════════════════════════════════════════╗
+    ║  PARA CAMBIAR DE TEMA, reemplazá config.js   ║
+    ║  por cualquier otro archivo de configuración ║
+    ║  (ej. config-supermercado.js)                ║
+    ╚══════════════════════════════════════════════╝
+  -->
+  <script src="config.js"></script>
+
+  <!--
+    Clases del modelo y la vista — orden importante:
+    cada archivo puede usar las clases definidas antes de él.
+  -->
+  <script src="Configuracion.js"></script>
+  <script src="Objeto.js"></script>
+  <script src="Progreso.js"></script>
+  <script src="Cuadrante.js"></script>
+  <script src="ObjetoArrastrable.js"></script>
+  <script src="GestorArrastre.js"></script>
+  <script src="Juego.js"></script>
+</head>
+<body>
+
+  <!-- ── Aplicación principal ─────────────────────────── -->
+  <div id="app">
+
+    <!-- Encabezado con título y barra de progreso -->
+    <header id="header">
+      <div class="header-text">
+        <h1 id="app-title"></h1>
+        <p  id="app-subtitle"></p>
+      </div>
+      <div id="progress-section">
+        <div id="progress-bar-wrap">
+          <div id="progress-bar"></div>
+        </div>
+        <span id="progress-label">0 / 0</span>
+      </div>
+    </header>
+
+    <!-- Grilla 2×2 de cuadrantes (generada por JS) -->
+    <main id="main">
+      <div id="quadrant-grid"></div>
+    </main>
+
+    <!-- Panel de objetos para arrastrar -->
+    <section id="objects-panel">
+      <p id="panel-hint">Arrastrá cada objeto al lugar correcto</p>
+      <div id="objects-list"></div>
+    </section>
+
+  </div>
+
+  <!-- ── Overlay de finalización ──────────────────────── -->
+  <div id="overlay" class="hidden">
+    <div id="overlay-content">
+      <div id="overlay-emoji">🎉</div>
+      <h2>¡Excelente!</h2>
+      <p>Clasificaste todos los objetos correctamente</p>
+      <button id="restart-btn">Jugar de nuevo</button>
+    </div>
+  </div>
+
+  <!-- Punto de entrada: instancia Configuracion y Juego -->
+  <script src="main.js"></script>
+</body>
+</html>
