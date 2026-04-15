@@ -1,0 +1,1 @@
+Esta aplicación fue generada por Claude con las instrucciones que se encuentran en prompt.md
